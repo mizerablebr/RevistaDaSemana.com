@@ -7,17 +7,20 @@ public class PostData {
 
     private String title;
     private String link;
+    private String category;
+
 
     //Sample Content
     public static final PostData[] postData = {
-            new PostData("miz é o hospedador", "http://www.miz.com.br"),
-            new PostData("Google é o buscador", "http://www.google.com.br")
+            new PostData("miz é o hospedador", "http://www.miz.com.br", "Blog"),
+            new PostData("Google é o buscador", "http://www.google.com.br", "Nacionais")
     };
 
     //Constructor
-    public PostData(String title, String link) {
+    public PostData(String title, String link, String category) {
         this.title = title;
         this.link = link;
+        this.category = category;
     }
 
     //Getter
@@ -28,6 +31,10 @@ public class PostData {
     public String getLink() {
         return link;
     }
+    public String getCategory() {
+        return category;
+    }
+
 
     //toString()
     public String toString() {

@@ -69,6 +69,7 @@ public class RevistaDaSemanaXmlParser {
         parser.require(XmlPullParser.START_TAG, ns, "item");
         String title = null;
         String link = null;
+        String category = null;
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
@@ -78,11 +79,14 @@ public class RevistaDaSemanaXmlParser {
                 title = readTitle(parser);
             } else if (name.equals("link")) {
                 link = readLink(parser);
+            } else if (name.equals("category")) {
+                category = readCategory(parser);
+                Log.d("readPostData","category: " + category);
             } else {
                 skip(parser);
             }
         }
-        return new PostData(title, link);
+        return new PostData(title, link, category);
     }
 
     //Processes title tags in the feed
@@ -99,6 +103,12 @@ public class RevistaDaSemanaXmlParser {
         String link = readText(parser);
         parser.require(XmlPullParser.END_TAG, ns, "link");
         return link;
+    }
+    private String readCategory(XmlPullParser parser) throws XmlPullParserException, IOException {
+        parser.require(XmlPullParser.START_TAG, ns, "category");
+        String category = readText(parser);
+        parser.require(XmlPullParser.END_TAG, ns, "category");
+        return category;
     }
 
     //For the tags title and link, extracts their text values.

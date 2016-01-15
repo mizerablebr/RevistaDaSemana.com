@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.os.Handler;
 
@@ -29,7 +30,7 @@ import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ArrayAdapter<PostData> listAdapter;
+    private PostDataAdapter listAdapter;
     private ArrayList<PostData> listAdapterContent = new ArrayList<PostData>(Arrays.asList(PostData.postData));
     private ListView listView;
     private ProgressDialog mProgressDialog;
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemClickListener(itemClickListener);
 
         //Add an ListView Adapter
-        listAdapter = new ArrayAdapter<PostData>(MainActivity.this, R.layout.rowlayout, R.id.listView_label, listAdapterContent);
+        listAdapter = new PostDataAdapter(this,listAdapterContent);
         listView.setAdapter(listAdapter);
 
         //Create BroadCast Listener to update ListView e display ProgressDialog
@@ -151,8 +152,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void updateListView () {
-        listAdapter.clear();
-        listAdapter.addAll(listAdapterContent);
+        synchronized (this) {
+            listAdapter.clear();
+            listAdapter.addAll(listAdapterContent);
+            listView.invalidateViews();
+            listView.refreshDrawableState();
+        }
+
+
     }
 
     //Setup Menu
