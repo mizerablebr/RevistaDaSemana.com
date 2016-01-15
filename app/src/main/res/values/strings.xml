@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">RevistaDaSemana.com</string>
+    <string name="titleRevista">Revista da Semana</string>
+    <string name="updateInProgress">Atualizando Notícias</string>
+    <string name="baixando">Baixando...</string>
+    <string name="updatePosts">Atualizar Publicações</string>
+    <string name="settings">Configurações</string>
+    <string-array name="samplePosts">
+        <item>MIZ.com.br</item>
+        <item>GOOGLE.com.br</item>
+    </string-array>
+</resources>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:RevistaDaSemana.com="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/updatePosts"
+        android:title="@string/updatePosts"
+        android:icon="@drawable/ic_cached_white_36dp"
+        android:orderInCategory="1"
+        RevistaDaSemana.com:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/settings"
+        android:title="@string/settings"
+        android:orderInCategory="100"
+        RevistaDaSemana.com:showAsAction="never"/>
+
+</menu>
