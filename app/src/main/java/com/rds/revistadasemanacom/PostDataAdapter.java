@@ -2,7 +2,6 @@ package com.rds.revistadasemanacom;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -90,13 +89,10 @@ public class PostDataAdapter extends BaseAdapter {
         int drawable = 0;
         switch (category) {
             case "Blog":
-                drawable = R.drawable.ic_info_outline_white_36dp;
-                break;
-            case "Nacionais":
-                drawable = R.drawable.ic_cached_white_36dp;
+                drawable = R.drawable.ic_timer_black_36dp;
                 break;
             default:
-                drawable = R.drawable.ic_cached_white_36dp;
+                drawable = R.drawable.ic_info_outline_white_36dp;
         }
         return drawable;
     }
