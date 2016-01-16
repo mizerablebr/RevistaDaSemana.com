@@ -233,6 +233,7 @@ public class MainActivity extends AppCompatActivity {
             postDataValues.put("TITLE",pd.getTitle());
             postDataValues.put("LINK",pd.getLink());
             postDataValues.put("CATEGORY",pd.getCategory());
+            postDataValues.put("CONTENT",pd.getContent());
             db.insert("POSTDATA", null, postDataValues);
         }
         db.close();

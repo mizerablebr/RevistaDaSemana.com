@@ -19,7 +19,6 @@ public class WebPostActivity extends Activity {
 
         //Get data from Intent
         String titleStr = (String) getIntent().getExtras().get(EXTRA_POSTDATATITLE);
-        String linkStr = (String) getIntent().getExtras().get(EXTRA_POSTDATALINK);
         String contentStr = (String) getIntent().getExtras().get(EXTRA_POSTDATACONTENT);
 
 
@@ -27,11 +26,10 @@ public class WebPostActivity extends Activity {
         //Populate the view
         TextView title = (TextView) findViewById(R.id.titleTextView);
         title.setText(titleStr);
-        TextView link = (TextView) findViewById(R.id.linkTextView);
-        link.setText(linkStr);
+
 
         WebView webView = (WebView) findViewById(R.id.webView);
-        webView.loadData(contentStr,"text/html ; utf-8",null);
+        webView.loadData(contentStr,"text/html; charset=UTF-8",null);
 
     }
 }
