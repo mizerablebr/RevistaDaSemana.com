@@ -10,6 +10,7 @@ public class WebPostActivity extends Activity {
     public static final String EXTRA_POSTDATANO = "postDataNo";
     public static final String EXTRA_POSTDATATITLE = "postDataTitle";
     public static final String EXTRA_POSTDATALINK = "postDataLink";
+    public static final String EXTRA_POSTDATACONTENT = "postDataContent";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +20,8 @@ public class WebPostActivity extends Activity {
         //Get data from Intent
         String titleStr = (String) getIntent().getExtras().get(EXTRA_POSTDATATITLE);
         String linkStr = (String) getIntent().getExtras().get(EXTRA_POSTDATALINK);
+        String contentStr = (String) getIntent().getExtras().get(EXTRA_POSTDATACONTENT);
+
 
 
         //Populate the view
@@ -28,7 +31,7 @@ public class WebPostActivity extends Activity {
         link.setText(linkStr);
 
         WebView webView = (WebView) findViewById(R.id.webView);
-        webView.loadUrl(linkStr);
+        webView.loadData(contentStr,"text/html ; utf-8",null);
 
     }
 }

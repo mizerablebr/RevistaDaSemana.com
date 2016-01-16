@@ -1,8 +1,10 @@
 package com.rds.revistadasemanacom;
 
+import android.text.Html;
 import android.util.Log;
 import android.util.Xml;
 
+import org.jsoup.Jsoup;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -70,6 +72,7 @@ public class RevistaDaSemanaXmlParser {
         String title = null;
         String link = null;
         String category = null;
+        String content = null;
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
                 continue;
@@ -82,11 +85,15 @@ public class RevistaDaSemanaXmlParser {
             } else if (name.equals("category")) {
                 category = readCategory(parser);
                 Log.d("readPostData","category: " + category);
+            } else if (name.equals("content:encoded")) {
+                content = readContent(parser);
+                content = Jsoup.parse(content).toString();
+                Log.d("readPostData","content: " + content);
             } else {
                 skip(parser);
             }
         }
-        return new PostData(title, link, category);
+        return new PostData(title, link, category, content);
     }
 
     //Processes title tags in the feed
@@ -109,6 +116,12 @@ public class RevistaDaSemanaXmlParser {
         String category = readText(parser);
         parser.require(XmlPullParser.END_TAG, ns, "category");
         return category;
+    }
+    private String readContent(XmlPullParser parser) throws XmlPullParserException, IOException {
+        parser.require(XmlPullParser.START_TAG, ns, "content:encoded");
+        String content = readText(parser);
+        parser.require(XmlPullParser.END_TAG, ns, "content:encoded");
+        return content;
     }
 
     //For the tags title and link, extracts their text values.

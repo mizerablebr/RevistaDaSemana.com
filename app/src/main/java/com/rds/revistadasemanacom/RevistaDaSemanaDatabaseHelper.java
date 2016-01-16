@@ -22,9 +22,10 @@ public class RevistaDaSemanaDatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE POSTDATA (_id INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + "TITLE TEXT, "
                 + "LINK TEXT, "
-                + "CATEGORY TEXT);");
-        insertPostData(db, "Primeira notícia do banco de dados", "www.miz.com.br", "Nacional");
-        insertPostData(db, "Segunda notícia do banco de dados", "http://www.google.com.br", "Blog");
+                + "CATEGORY TEXT, "
+                + "CONTENT TEXT);");
+        insertPostData(db, "Primeira notícia do banco de dados", "www.miz.com.br", "Nacional", "blá blá blá");
+        insertPostData(db, "Segunda notícia do banco de dados", "http://www.google.com.br", "Blog", "blu blu blu");
 
     }
 
@@ -33,11 +34,12 @@ public class RevistaDaSemanaDatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    private static void insertPostData(SQLiteDatabase db, String title, String link, String category) {
+    private static void insertPostData(SQLiteDatabase db, String title, String link, String category, String content) {
         ContentValues postDataValues = new ContentValues();
         postDataValues.put("TITLE", title);
         postDataValues.put("LINK", link);
         postDataValues.put("CATEGORY", category);
+        postDataValues.put("CONTENT", content);
         db.insert("POSTDATA", null, postDataValues);
 
     }
