@@ -4,10 +4,15 @@ package com.rds.revistadasemanacom;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
@@ -21,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.os.Handler;
+import android.widget.Toast;
 
 
 import java.util.ArrayList;
@@ -31,7 +37,7 @@ import java.util.Arrays;
 public class MainActivity extends AppCompatActivity {
 
     private PostDataAdapter listAdapter;
-    private ArrayList<PostData> listAdapterContent = new ArrayList<PostData>(Arrays.asList(PostData.postData));
+    private ArrayList<PostData> listAdapterContent = new ArrayList<PostData>();
     private ListView listView;
     private ProgressDialog mProgressDialog;
 
@@ -81,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
         listView.setOnItemClickListener(itemClickListener);
 
         //Add an ListView Adapter
+        listAdapterContent = getPostDataFromDb();
         listAdapter = new PostDataAdapter(this,listAdapterContent);
         listView.setAdapter(listAdapter);
 
@@ -113,8 +120,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
-
         //Register BroadCast to get know when the service is done
         LocalBroadcastManager.getInstance(this).registerReceiver((receiver), new IntentFilter(GetPostService.GETPOST_RESULT));
 
@@ -138,9 +143,10 @@ public class MainActivity extends AppCompatActivity {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                Log.d("handler.post","postService: " + postService.toString());
+                Log.d("handler.post", "postService: " + postService.toString());
                 if (postService != null) {
                     listAdapterContent = new ArrayList<PostData>(postService.getPostDatasToView());
+                    updatePostDataDb(listAdapterContent);
                     Log.d("Result - Service", listAdapterContent.toString());
                     updateListView();
                 } else {
@@ -156,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
             listAdapter.clear();
             listAdapter.addAll(listAdapterContent);
             listView.invalidateViews();
-            listView.refreshDrawableState();
+
         }
 
 
@@ -176,6 +182,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    //Handle click on actionBar and Menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -186,4 +193,48 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private ArrayList<PostData> getPostDataFromDb() {
+
+        ArrayList<PostData> entries = new ArrayList<PostData>();
+
+        //Create a Cursor to access DB
+        try {
+            SQLiteOpenHelper revistaDaSemanaDatabaseHelper = new RevistaDaSemanaDatabaseHelper(this);
+            SQLiteDatabase db = revistaDaSemanaDatabaseHelper.getReadableDatabase();
+            Cursor cursor = db.query("POSTDATA",new String[] {"TITLE", "LINK", "CATEGORY"},null,null,null,null,null);
+
+            //Move to the first record in the cursor
+            while (cursor.moveToNext()) {
+                PostData postData = new PostData(cursor.getString(0),cursor.getString(1),cursor.getString(2));
+                entries.add(postData);
+            }
+            cursor.close();
+            db.close();
+
+        } catch (SQLiteException e) {
+            Toast.makeText(MainActivity.this, "Erro ao acessar Banco de dados", Toast.LENGTH_SHORT).show();
+        }
+
+        return entries;
+    }
+
+    private void updatePostDataDb(ArrayList<PostData> entries) {
+
+        SQLiteOpenHelper revistaDaSemanaDatabaseHelper = new RevistaDaSemanaDatabaseHelper(this);
+        SQLiteDatabase db = revistaDaSemanaDatabaseHelper.getWritableDatabase();
+        //Create the database
+        db.delete("POSTDATA",null,null);
+        //Insert new PostData
+        for (PostData pd : entries) {
+            ContentValues postDataValues = new ContentValues();
+            postDataValues.put("TITLE",pd.getTitle());
+            postDataValues.put("LINK",pd.getLink());
+            postDataValues.put("CATEGORY",pd.getCategory());
+            db.insert("POSTDATA", null, postDataValues);
+        }
+        db.close();
+
+    }
+
 }
