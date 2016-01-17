@@ -112,6 +112,14 @@ public class MainActivity extends AppCompatActivity {
                         //Update adapter content from service then dismiss the ProgressDialog
                         updateAdapterContentFromService();
                         mProgressDialog.dismiss();
+
+                        //UnbindService and Unregister BroadCast Receiver
+                        if (bound) {
+                            unbindService(connection);
+                            bound = false;
+                        }
+                        //Unregister broadcast
+                        LocalBroadcastManager.getInstance(MainActivity.this).unregisterReceiver(receiver);
                 }
 
             }
@@ -122,20 +130,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        //Register BroadCast to get know when the service is done
-        LocalBroadcastManager.getInstance(this).registerReceiver((receiver), new IntentFilter(GetPostService.GETPOST_RESULT));
+
 
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        if (bound) {
-            unbindService(connection);
-            bound = false;
-        }
-        //Unregister broadcast
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(receiver);
+
     }
 
     private void updateAdapterContentFromService () {
@@ -191,6 +193,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.updatePosts:
                 Intent intent = new Intent(this, GetPostService.class);
                 bindService(intent, connection, Context.BIND_AUTO_CREATE);
+
+                //Register BroadCast to get know when the service is done
+                LocalBroadcastManager.getInstance(this).registerReceiver((receiver), new IntentFilter(GetPostService.GETPOST_RESULT));
                 break;
         }
         return super.onOptionsItemSelected(item);
