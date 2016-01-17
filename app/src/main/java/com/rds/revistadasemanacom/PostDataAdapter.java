@@ -73,7 +73,6 @@ public class PostDataAdapter extends BaseAdapter {
             vi = inflater.inflate(R.layout.rowlayout, parent, false);
             mViewHolder.icon = (ImageView) vi.findViewById(R.id.listview_icon);
             mViewHolder.label = (TextView) vi.findViewById(R.id.listView_label);
-
             vi.setTag(mViewHolder);
 
         } else {
@@ -88,11 +87,11 @@ public class PostDataAdapter extends BaseAdapter {
     private int defineImage(String category) {
         int drawable = 0;
         switch (category) {
-            case "Blog":
-                drawable = R.drawable.ic_timer_black_36dp;
+            case "Readed":
+                drawable = R.drawable.ic_done_black_36dp;
                 break;
             default:
-                drawable = R.drawable.ic_info_outline_white_36dp;
+                drawable = R.drawable.ic_news;
         }
         return drawable;
     }
