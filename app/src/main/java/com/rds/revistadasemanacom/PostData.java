@@ -47,5 +47,15 @@ public class PostData {
         return this.title;
     }
 
+    //Overrides equal() and hashCode()
+    public boolean equals(Object aPostData) {
+        PostData pD = (PostData) aPostData;
+        return getTitle().equals(pD.getTitle());
+    }
+
+    public int hashCode() {
+        return title.hashCode();
+    }
+
 
 }

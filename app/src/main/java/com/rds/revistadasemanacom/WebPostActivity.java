@@ -23,13 +23,15 @@ public class WebPostActivity extends AppCompatActivity {
     public static final String EXTRA_POSTDATALINK = "postDataLink";
     public static final String EXTRA_POSTDATACONTENT = "postDataContent";
 
+    String titleStr;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web_post);
 
         //Get data from Intent
-        String titleStr = (String) getIntent().getExtras().get(EXTRA_POSTDATATITLE);
+        titleStr = (String) getIntent().getExtras().get(EXTRA_POSTDATATITLE);
         String contentStr = (String) getIntent().getExtras().get(EXTRA_POSTDATACONTENT);
 
 
@@ -38,12 +40,13 @@ public class WebPostActivity extends AppCompatActivity {
         TextView title = (TextView) findViewById(R.id.titleTextView);
         title.setText(titleStr);
 
-        //Update PostData category to Readed
-        new SetPostDataReaded().execute(titleStr);
 
         WebView webView = (WebView) findViewById(R.id.webView);
         webView.setBackgroundColor(Color.TRANSPARENT);
         webView.loadData(contentStr, "text/html; charset=UTF-8", null);
+
+        //Set PostData as Readed
+        new SetPostDataReaded().execute(titleStr);
 
         //Populate AdView
         AdView mAdView = (AdView) findViewById(R.id.adView);
@@ -51,6 +54,7 @@ public class WebPostActivity extends AppCompatActivity {
         mAdView.loadAd(adRequest);
 
     }
+
 
     //Change the PostData Category to Readed
     private class SetPostDataReaded extends AsyncTask<String, Void, Void> {

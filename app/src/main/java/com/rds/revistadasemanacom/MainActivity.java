@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     private PostDataAdapter listAdapter;
     private ArrayList<PostData> listAdapterContent = new ArrayList<PostData>();
+    private ArrayList<PostData> oldListAdapterContent = new ArrayList<PostData>();
     private ListView listView;
     private ProgressDialog mProgressDialog;
 
@@ -131,13 +132,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-
     }
 
     @Override
     protected void onStop() {
         super.onStop();
 
+    }
+
+    @Override
+    protected void onResume() {
+        listAdapterContent = getPostDataFromDb();
+        updateListView();
+        super.onResume();
     }
 
     private void updateAdapterContentFromService () {
@@ -149,8 +156,9 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 Log.d("handler.post", "postService: " + postService.toString());
                 if (postService != null) {
+                    oldListAdapterContent = listAdapterContent;
                     listAdapterContent = new ArrayList<PostData>(postService.getPostDatasToView());
-                    updatePostDataDb(listAdapterContent);
+                    updatePostDataDb(oldListAdapterContent, listAdapterContent);
                     Log.d("Result - Service", listAdapterContent.toString());
                     updateListView();
                 } else {
@@ -226,18 +234,34 @@ public class MainActivity extends AppCompatActivity {
         return entries;
     }
 
-    private void updatePostDataDb(ArrayList<PostData> entries) {
+    private void updatePostDataDb(ArrayList<PostData> oldList, ArrayList<PostData> newList) {
+
+        ////Merge DB with just new PostDatas comparing titles
+        ArrayList<PostData> newestList;
+
+        //Remove old PostData from new ArrayList
+        Log.d("MergeList", "newList: " + newList.toString());
+        Log.d("MergeList", "oldList: " + oldList.toString());
+
+        newList.removeAll(oldList);
+        Log.d("MergeList", "newList after removeAll(oldList: " + newList.toString());
+        //Move old PostData to the and of the list opening space for the new PostData
+        newestList = newList;
+        if (newestList.size() < 10) {
+            newestList.addAll(oldList.subList(0,(10-newestList.size())));
+        }
+
 
         SQLiteOpenHelper revistaDaSemanaDatabaseHelper = new RevistaDaSemanaDatabaseHelper(this);
         SQLiteDatabase db = revistaDaSemanaDatabaseHelper.getWritableDatabase();
         //Create the database
-        db.delete("POSTDATA",null,null);
+        db.delete("POSTDATA", null, null);
         //Insert new PostData
-        for (PostData pd : entries) {
+        for (PostData pd : newestList) {
             ContentValues postDataValues = new ContentValues();
             postDataValues.put("TITLE",pd.getTitle());
             postDataValues.put("LINK",pd.getLink());
-            postDataValues.put("CATEGORY",pd.getCategory());
+            postDataValues.put("CATEGORY", pd.getCategory());
             postDataValues.put("CONTENT",pd.getContent());
             db.insert("POSTDATA", null, postDataValues);
         }
