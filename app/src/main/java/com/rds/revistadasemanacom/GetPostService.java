@@ -21,12 +21,12 @@ public class GetPostService extends Service {
 
     private final IBinder binder = new GetPostBinder();
     private List<PostData> postDatasToView = null;
-    //private static final String URL = "http://revistadasemana.com/v3/feed/";
+    private static final String URL = "http://revistadasemana.com/v3/feed/";
 
     ///Test xml
     //private static final String URL = "https://dl.dropboxusercontent.com/u/21437928/feed";
     //private static final String URL = "https://dl.dropboxusercontent.com/u/21437928/feed2";
-    private static final String URL = "https://dl.dropboxusercontent.com/u/21437928/feed3";
+    //private static final String URL = "https://dl.dropboxusercontent.com/u/21437928/feed3";
 
     //Broadcast Strings
     public static final String GETPOST_RESULT = "com.rds.revistadasemanacom.GetPostService.POSTDATAREADY";

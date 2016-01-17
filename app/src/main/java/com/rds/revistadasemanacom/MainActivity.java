@@ -125,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         //Unregister broadcast
                         LocalBroadcastManager.getInstance(MainActivity.this).unregisterReceiver(receiver);
+                        break;
                     case GetPostService.SERVICE_ERROR:
                         mProgressDialog.dismiss();
                         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
