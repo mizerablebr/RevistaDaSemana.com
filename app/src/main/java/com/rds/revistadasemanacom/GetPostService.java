@@ -21,17 +21,19 @@ public class GetPostService extends Service {
 
     private final IBinder binder = new GetPostBinder();
     private List<PostData> postDatasToView = null;
-    private static final String URL = "http://revistadasemana.com/v3/feed/";
+    //private static final String URL = "http://revistadasemana.com/v3/feed/";
 
     ///Test xml
     //private static final String URL = "https://dl.dropboxusercontent.com/u/21437928/feed";
     //private static final String URL = "https://dl.dropboxusercontent.com/u/21437928/feed2";
+    private static final String URL = "https://dl.dropboxusercontent.com/u/21437928/feed3";
 
     //Broadcast Strings
     public static final String GETPOST_RESULT = "com.rds.revistadasemanacom.GetPostService.POSTDATAREADY";
     public static final String GETPOST_MESSAGE = "com.rds.revistadasemanacom.GetPostService.MESSAGE";
     public static final String SERVICE_INITIATED = "serviceInitiated";
     public static final String SERVICE_FINICHED = "serviceFinished";
+    public static final String SERVICE_ERROR = "serviceERRO";
 
 
     //Setup Broadcast
@@ -52,7 +54,6 @@ public class GetPostService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        //TODO - Code to get PostData
         //Setup LocalBroadCast
         broadcaster = LocalBroadcastManager.getInstance(this);
 
@@ -72,6 +73,7 @@ public class GetPostService extends Service {
 
     // Implementation of AsyncTask used to download XML feed from revistadasemana.com
     private class DownloadXmlTask extends AsyncTask<String, Void, List<PostData>> {
+        private Exception exceptionToBeThrown;
 
         @Override
         protected void onPreExecute() {
@@ -87,9 +89,11 @@ public class GetPostService extends Service {
                 return result;
             } catch (IOException e) {
                 Log.d("doInBackgroud", "erro executando loadXmlFromNetwork - IO");
+                exceptionToBeThrown = e;
                 return null;
             } catch (XmlPullParserException e) {
                 Log.d("doInBackgroud", "erro executando loadXmlFromNetwork - XML");
+                exceptionToBeThrown = e;
                 return null;
             }
         }
@@ -98,8 +102,14 @@ public class GetPostService extends Service {
         protected void onPostExecute(List<PostData> postDatas) {
             postDatasToView = postDatas;
             //Broadcast that the results are ready
-            sendResult(SERVICE_FINICHED);
-            Log.d("Result", postDatasToView.toString());
+            if (exceptionToBeThrown == null) {
+                sendResult(SERVICE_FINICHED);
+                Log.d("Result", postDatasToView.toString());
+            } else {
+                sendResult(SERVICE_ERROR);
+                Log.d("ERROR", "Exception throwned");
+            }
+
         }
     }
 

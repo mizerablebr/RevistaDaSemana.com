@@ -1,11 +1,13 @@
 package com.rds.revistadasemanacom;
 
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -13,6 +15,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
@@ -121,22 +125,37 @@ public class MainActivity extends AppCompatActivity {
                         }
                         //Unregister broadcast
                         LocalBroadcastManager.getInstance(MainActivity.this).unregisterReceiver(receiver);
+                    case GetPostService.SERVICE_ERROR:
+                        mProgressDialog.dismiss();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                        builder.setMessage(R.string.errorMessage)
+                                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        //Ok
+                                    }
+                                })
+                        .setNegativeButton(R.string.retry, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                updatePosts();
+                            }
+                        });
+                        builder.show();
+                        //TODO - Duplicated Code, fix it.
+                        //UnbindService and Unregister BroadCast Receiver
+                        if (bound) {
+                            unbindService(connection);
+                            bound = false;
+                        }
+                        //Unregister broadcast
+                        LocalBroadcastManager.getInstance(MainActivity.this).unregisterReceiver(receiver);
+                        break;
+
                 }
 
             }
         };
-
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
 
     }
 
@@ -149,7 +168,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateAdapterContentFromService () {
         final Handler handler = new Handler();
-        //TODO - Test internet connection
 
         handler.post(new Runnable() {
             @Override
@@ -199,14 +217,23 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.updatePosts:
-                Intent intent = new Intent(this, GetPostService.class);
-                bindService(intent, connection, Context.BIND_AUTO_CREATE);
-
-                //Register BroadCast to get know when the service is done
-                LocalBroadcastManager.getInstance(this).registerReceiver((receiver), new IntentFilter(GetPostService.GETPOST_RESULT));
+                updatePosts();
                 break;
+
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void updatePosts() {
+        if (checkInternetConnection()) {
+            Intent intent = new Intent(this, GetPostService.class);
+            bindService(intent, connection, Context.BIND_AUTO_CREATE);
+
+            //Register BroadCast to get know when the service is done
+            LocalBroadcastManager.getInstance(this).registerReceiver((receiver), new IntentFilter(GetPostService.GETPOST_RESULT));
+        } else {
+            Toast.makeText(MainActivity.this, "Não há conexão com a internet", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private ArrayList<PostData> getPostDataFromDb() {
@@ -266,6 +293,14 @@ public class MainActivity extends AppCompatActivity {
             db.insert("POSTDATA", null, postDataValues);
         }
         db.close();
+
+    }
+
+    private boolean checkInternetConnection() {
+        ConnectivityManager cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        return activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
     }
 
