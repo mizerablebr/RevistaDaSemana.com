@@ -1,11 +1,15 @@
 package com.rds.revistadasemanacom;
 
-import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.webkit.WebView;
 import android.widget.TextView;
 
-public class WebPostActivity extends Activity {
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
+public class WebPostActivity extends AppCompatActivity {
 
     public static final String EXTRA_POSTDATANO = "postDataNo";
     public static final String EXTRA_POSTDATATITLE = "postDataTitle";
@@ -27,9 +31,14 @@ public class WebPostActivity extends Activity {
         TextView title = (TextView) findViewById(R.id.titleTextView);
         title.setText(titleStr);
 
-
         WebView webView = (WebView) findViewById(R.id.webView);
+        webView.setBackgroundColor(Color.TRANSPARENT);
         webView.loadData(contentStr,"text/html; charset=UTF-8",null);
+
+        //Populate AdView
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
     }
 }

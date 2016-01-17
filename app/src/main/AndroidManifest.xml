@@ -19,7 +19,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".WebPostActivity"></activity>
+        <activity
+            android:name=".WebPostActivity"
+            android:parentActivityName=".MainActivity">
+        </activity>
         <service
             android:name=".GetPostService"
             android:enabled="true"
