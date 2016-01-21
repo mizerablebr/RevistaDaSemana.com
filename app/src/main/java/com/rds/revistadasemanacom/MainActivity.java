@@ -17,6 +17,7 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
@@ -219,6 +220,16 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.updatePosts:
                 updatePosts();
+                break;
+            case R.id.help:
+                Intent intentHelp = new Intent(this, OptionActivity.class);
+                startActivity(intentHelp);
+                break;
+            case R.id.contact:
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + "mizerablebr@gmail.com"));
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Contato do Aplicativo RevistaDaSemana");
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "Mensagem enviada do aplicativo Revista da Semana:");
+                startActivity(Intent.createChooser(emailIntent, "Contato Revista da Semana"));
                 break;
 
         }

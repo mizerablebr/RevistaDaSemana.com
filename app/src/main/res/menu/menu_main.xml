@@ -8,9 +8,20 @@
         android:orderInCategory="1"
         RevistaDaSemana.com:showAsAction="ifRoom" />
     <item
-        android:id="@+id/settings"
-        android:title="@string/settings"
+        android:id="@+id/help"
+        android:title="@string/help"
+        android:orderInCategory="2"
+        RevistaDaSemana.com:showAsAction="never"/>
+    <item
+        android:id="@+id/contact"
+        android:title="@string/contact"
+        android:orderInCategory="3"
+        RevistaDaSemana.com:showAsAction="never"/>
+    <item
+        android:id="@+id/resetDb"
+        android:title="@string/resetDb"
         android:orderInCategory="100"
         RevistaDaSemana.com:showAsAction="never"/>
+
 
 </menu>

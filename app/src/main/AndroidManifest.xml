@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.rds.revistadasemanacom">
 
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -21,14 +21,15 @@
         </activity>
         <activity
             android:name=".WebPostActivity"
-            android:parentActivityName=".MainActivity">
-        </activity>
+            android:parentActivityName=".MainActivity" />
+
         <service
             android:name=".GetPostService"
             android:enabled="true"
-            android:exported="false">
-        </service>
+            android:exported="false" />
 
+        <activity android:name=".OptionActivity"
+            android:parentActivityName=".MainActivity"/>
     </application>
 
 </manifest>
