@@ -226,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intentHelp);
                 break;
             case R.id.contact:
-                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + "mizerablebr@gmail.com"));
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + "revistadasemana@uol.com.br"));
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Contato do Aplicativo RevistaDaSemana");
                 emailIntent.putExtra(Intent.EXTRA_TEXT, "Mensagem enviada do aplicativo Revista da Semana:");
                 startActivity(Intent.createChooser(emailIntent, "Contato Revista da Semana"));
