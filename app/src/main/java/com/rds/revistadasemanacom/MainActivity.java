@@ -31,6 +31,7 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.os.Handler;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -81,13 +82,21 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> listView, View view, int position, long id) {
 
+                String selectedItem = ((TextView) view.findViewById(R.id.listView_label)).getText().toString();
+
+                if (selectedItem.equals(RevistaDaSemanaDatabaseHelper.FIRST_POST) || selectedItem.equals(RevistaDaSemanaDatabaseHelper.SECOND_POST)) {
+                    Intent intentHelp = new Intent(MainActivity.this, OptionActivity.class);
+                    intentHelp.putExtra("menu", OptionActivity.MENU_HELP);
+                    startActivity(intentHelp);
+                } else {
+
                     Intent intent = new Intent(MainActivity.this, WebPostActivity.class);
                     intent.putExtra(WebPostActivity.EXTRA_POSTDATATITLE, listAdapterContent.get(position).getTitle());
                     intent.putExtra(WebPostActivity.EXTRA_POSTDATALINK, listAdapterContent.get(position).getLink());
                     intent.putExtra(WebPostActivity.EXTRA_POSTDATACONTENT, listAdapterContent.get(position).getContent());
 
                     startActivity(intent);
-
+                }
             }
         };
         //Add listener to ListView

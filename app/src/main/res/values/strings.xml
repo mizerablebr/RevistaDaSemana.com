@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">RevistaDS</string>
+    <string name="app_name">RevSemana</string>
     <string name="app_full">RevistaDaSemana.com</string>
     <string name="titleRevista">Revista da Semana</string>
     <string name="updateInProgress">Atualizando Notícias</string>
-    <string name="baixando">Baixando...</string>
+    <string name="baixando">Baixando&#8230;</string>
     <string name="updatePosts">Atualizar Publicações</string>
     <string name="settings">Configurações</string>
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
@@ -24,5 +24,6 @@
     <string name="about">Sobre</string>
     <string name="author_image">Imagem do Autor</string>
     <string name="about_author">Sobre o Autor</string>
-    <string name="about_author_text">Formado em Jornalismo pelo Universidade Católica de Pernambuco em 1978, registro DRT/PE nº 1.224/84. Faz radiojornalismo desde março de 1980, com um programa semanal nas Rádios Espinharas AM e FM na cidade de Patos (PB). Mantém na TV Sol, canal fechado de televisão na cidade de Patos, que faz parte do conteúdo da televisão por assinatura da Sol TV, o programa SALA DE CONVERSA, um programa de entrevistas e debates.</string>
+    <string name="about_author_text">Luiz Gonzaga Lima de Morais: formado em Jornalismo pelo Universidade Católica de Pernambuco em 1978, registro DRT/PE nº 1.224/84. Faz radiojornalismo desde março de 1980, com um programa semanal nas Rádios Espinharas AM e FM na cidade de Patos (PB). Mantém na TV Sol, canal fechado de televisão na cidade de Patos, que faz parte do conteúdo da televisão por assinatura da Sol TV, o programa SALA DE CONVERSA, um programa de entrevistas e debates.</string>
+    <string name="developer">Aplicativo por Bruno Morais: bruno@miz.com.br</string>
 </resources>

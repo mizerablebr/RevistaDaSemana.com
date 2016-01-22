@@ -10,6 +10,8 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class RevistaDaSemanaDatabaseHelper extends SQLiteOpenHelper {
 
+    public static final String FIRST_POST = "Precisa de ajuda? Clique aqui!";
+    public static final String SECOND_POST = "Segunda notícia";
     private static final String DB_NAME = "revistadasemana";
     private static final int DB_VERSION = 1;
 
@@ -24,8 +26,8 @@ public class RevistaDaSemanaDatabaseHelper extends SQLiteOpenHelper {
                 + "LINK TEXT, "
                 + "CATEGORY TEXT, "
                 + "CONTENT TEXT);");
-        insertPostData(db, "Primeira notícia do banco de dados", "www.miz.com.br", "Nacional", "blá blá blá");
-        insertPostData(db, "Segunda notícia do banco de dados", "http://www.google.com.br", "Blog", "blu blu blu");
+        insertPostData(db, FIRST_POST, "www.miz.com.br", "Nacional", "blá blá blá");
+        insertPostData(db, SECOND_POST, "http://www.google.com.br", "Blog", "blu blu blu");
 
     }
 
