@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">RevistaDaSemana.com</string>
+    <string name="app_name">RevistaDS</string>
     <string name="titleRevista">Revista da Semana</string>
     <string name="updateInProgress">Atualizando Notícias</string>
     <string name="baixando">Baixando...</string>
