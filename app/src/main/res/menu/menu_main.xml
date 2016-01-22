@@ -18,6 +18,11 @@
         android:orderInCategory="3"
         RevistaDaSemana.com:showAsAction="never"/>
     <item
+        android:id="@+id/about"
+        android:title="@string/about"
+        android:orderInCategory="4"
+        RevistaDaSemana.com:showAsAction="never"/>
+    <item
         android:id="@+id/resetDb"
         android:title="@string/resetDb"
         android:orderInCategory="100"

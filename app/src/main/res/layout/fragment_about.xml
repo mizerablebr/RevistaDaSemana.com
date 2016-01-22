@@ -1,0 +1,45 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.rds.revistadasemanacom.AboutFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_full"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/about_title" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/about_author"
+        android:id="@+id/about_about_author"
+        android:layout_below="@+id/about_title"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:id="@+id/about_author_image"
+        android:contentDescription="@string/author_image"
+        android:layout_below="@+id/about_about_author"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/author_image" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/about_author_text"
+        android:id="@+id/about_description"
+        android:layout_below="@+id/about_author_image"
+        android:layout_centerHorizontal="true"
+        android:gravity="fill_horizontal"/>
+
+
+</RelativeLayout>

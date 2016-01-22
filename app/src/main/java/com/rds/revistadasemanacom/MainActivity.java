@@ -223,6 +223,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.help:
                 Intent intentHelp = new Intent(this, OptionActivity.class);
+                intentHelp.putExtra("menu", OptionActivity.MENU_HELP);
                 startActivity(intentHelp);
                 break;
             case R.id.contact:
@@ -230,6 +231,11 @@ public class MainActivity extends AppCompatActivity {
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Contato do Aplicativo RevistaDaSemana");
                 emailIntent.putExtra(Intent.EXTRA_TEXT, "Mensagem enviada do aplicativo Revista da Semana:");
                 startActivity(Intent.createChooser(emailIntent, "Contato Revista da Semana"));
+                break;
+            case R.id.about:
+                Intent intentAbout = new Intent(this, OptionActivity.class);
+                intentAbout.putExtra("menu", OptionActivity.MENU_ABOUT);
+                startActivity(intentAbout);
                 break;
 
         }

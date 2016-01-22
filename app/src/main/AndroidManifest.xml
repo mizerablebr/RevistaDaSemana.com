@@ -12,7 +12,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,6 +22,7 @@
         </activity>
         <activity
             android:name=".WebPostActivity"
+            android:label="@string/app_full"
             android:parentActivityName=".MainActivity" />
 
         <service
@@ -29,6 +31,7 @@
             android:exported="false" />
 
         <activity android:name=".OptionActivity"
+            android:label="@string/app_full"
             android:parentActivityName=".MainActivity"/>
     </application>
 
