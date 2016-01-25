@@ -6,7 +6,10 @@
     <string name="baixando">Baixando&#8230;</string>
     <string name="updatePosts">Atualizar Publicações</string>
     <string name="settings">Configurações</string>
-    <string name="banner_ad_unit_id">ca-app-pub-9888257609098084/3744581825</string>
+    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+    <!-- Debug Banner id: <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string> -->
+    <!-- Live Banner id: <string name="banner_ad_unit_id">ca-app-pub-9888257609098084/3744581825</string> -->
+
     <string name="error">Erro!</string>
     <string name="ok">Ok</string>
     <string name="errorMessage">Download indisponível, tente novamente mais tarde.</string>

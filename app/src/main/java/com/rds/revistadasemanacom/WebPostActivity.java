@@ -18,12 +18,17 @@ import com.google.android.gms.ads.AdView;
 
 public class WebPostActivity extends AppCompatActivity {
 
-    public static final String EXTRA_POSTDATANO = "postDataNo";
     public static final String EXTRA_POSTDATATITLE = "postDataTitle";
     public static final String EXTRA_POSTDATALINK = "postDataLink";
     public static final String EXTRA_POSTDATACONTENT = "postDataContent";
+    public static final String EXTRA_POSTDATACATEGORY = "postDataCategory";
+    public static final String EXTRA_POSTDATAREAD = "postDataRead";
 
     String titleStr;
+    String linkStr;
+    String contentStr;
+    String categoryStr;
+    String readStr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,22 +36,24 @@ public class WebPostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_web_post);
 
         //Get data from Intent
-        titleStr = (String) getIntent().getExtras().get(EXTRA_POSTDATATITLE);
-        String contentStr = (String) getIntent().getExtras().get(EXTRA_POSTDATACONTENT);
-
-
+        titleStr = (String) getIntent().getStringExtra(EXTRA_POSTDATATITLE);
+        linkStr = (String) getIntent().getStringExtra(EXTRA_POSTDATALINK);
+        contentStr = (String) getIntent().getStringExtra(EXTRA_POSTDATACONTENT);
+        categoryStr = (String) getIntent().getStringExtra(EXTRA_POSTDATACATEGORY);
+        readStr = (String) getIntent().getStringExtra(EXTRA_POSTDATAREAD);
 
         //Populate the view
         TextView title = (TextView) findViewById(R.id.titleTextView);
         title.setText(titleStr);
-
+        TextView category = (TextView) findViewById(R.id.webView_category_label);
+        category.setText(categoryStr);
 
         WebView webView = (WebView) findViewById(R.id.webView);
         webView.setBackgroundColor(Color.TRANSPARENT);
         webView.loadData(contentStr, "text/html; charset=UTF-8", null);
 
-        //Set PostData as Readed
-        new SetPostDataReaded().execute(titleStr);
+        //Set PostData as Read
+        new SetPostDataRead().execute(titleStr);
 
         //Populate AdView
         AdView mAdView = (AdView) findViewById(R.id.adView);
@@ -56,15 +63,15 @@ public class WebPostActivity extends AppCompatActivity {
     }
 
 
-    //Change the PostData Category to Readed
-    private class SetPostDataReaded extends AsyncTask<String, Void, Void> {
+    //Change the PostData Category to Read
+    private class SetPostDataRead extends AsyncTask<String, Void, Void> {
         String title;
 
         @Override
         protected Void doInBackground(String... params) {
             title = params[0];
             ContentValues postDataValues = new ContentValues();
-            postDataValues.put("CATEGORY", "Readed");
+            postDataValues.put("READ", "yes");
 
             try {
                 SQLiteOpenHelper revistaDaSemanaDatabaseHelper = new RevistaDaSemanaDatabaseHelper(WebPostActivity.this);
@@ -73,6 +80,7 @@ public class WebPostActivity extends AppCompatActivity {
                 db.close();
 
             } catch (SQLiteException e) {
+                e.printStackTrace();
             }
 
 

@@ -55,6 +55,7 @@ public class PostDataAdapter extends BaseAdapter {
     static class ViewHolder {
         private ImageView icon;
         private TextView label;
+        private TextView categoryLabel;
     }
 
     @Override
@@ -69,21 +70,26 @@ public class PostDataAdapter extends BaseAdapter {
             vi = inflater.inflate(R.layout.rowlayout, parent, false);
             mViewHolder.icon = (ImageView) vi.findViewById(R.id.listview_icon);
             mViewHolder.label = (TextView) vi.findViewById(R.id.listView_label);
+            mViewHolder.categoryLabel = (TextView) vi.findViewById(R.id.listView_category_label);
             vi.setTag(mViewHolder);
 
         } else {
             mViewHolder = (ViewHolder) vi.getTag();
         }
 
-        mViewHolder.icon.setImageResource(defineImage(postData.getCategory()));
+        mViewHolder.icon.setImageResource(defineImage(postData.getRead()));
+        mViewHolder.icon.setAdjustViewBounds(true);
+        mViewHolder.icon.setMaxWidth(48);
+        mViewHolder.icon.setMaxHeight(48);
         mViewHolder.label.setText(postData.getTitle());
+        mViewHolder.categoryLabel.setText(postData.getCategory());
         return vi;
     }
 
-    private int defineImage(String category) {
+    private int defineImage(String read) {
         int drawable = 0;
-        switch (category) {
-            case "Readed":
+        switch (read) {
+            case "yes":
                 drawable = R.drawable.ic_done_black_36dp;
                 break;
             default:

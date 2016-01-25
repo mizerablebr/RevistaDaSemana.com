@@ -11,18 +11,30 @@
         android:layout_marginRight="10dp"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
+        android:minWidth="48dp"
+        android:maxWidth="46dp"
         android:layout_alignParentLeft="true"
+        android:layout_centerInParent="true"
         android:src="@drawable/ic_info_outline_white_36dp"
         android:tint="@android:color/holo_blue_dark"/>
-
+    <TextView
+        android:id="@+id/listView_category_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/listview_icon"
+        android:layout_alignParentTop="true"
+        android:textSize="12sp"
+        android:textColor="@color/wallet_holo_blue_light"/>
 
     <TextView
         android:id="@+id/listView_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:layout_marginTop="2dp"
         android:textSize="14sp"
         android:layout_toRightOf="@+id/listview_icon"
+        android:layout_below="@+id/listView_category_label"
         />
 
 </RelativeLayout>

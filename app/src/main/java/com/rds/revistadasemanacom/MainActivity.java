@@ -42,6 +42,8 @@ import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static boolean ISDEBUG = false;
+
     private PostDataAdapter listAdapter;
     private ArrayList<PostData> listAdapterContent = new ArrayList<PostData>();
     private ArrayList<PostData> oldListAdapterContent = new ArrayList<PostData>();
@@ -93,6 +95,8 @@ public class MainActivity extends AppCompatActivity {
                     intent.putExtra(WebPostActivity.EXTRA_POSTDATATITLE, listAdapterContent.get(position).getTitle());
                     intent.putExtra(WebPostActivity.EXTRA_POSTDATALINK, listAdapterContent.get(position).getLink());
                     intent.putExtra(WebPostActivity.EXTRA_POSTDATACONTENT, listAdapterContent.get(position).getContent());
+                    intent.putExtra(WebPostActivity.EXTRA_POSTDATACATEGORY, listAdapterContent.get(position).getCategory());
+                    intent.putExtra(WebPostActivity.EXTRA_POSTDATAREAD, listAdapterContent.get(position).getRead());
 
                     startActivity(intent);
                 }
@@ -198,10 +202,7 @@ public class MainActivity extends AppCompatActivity {
             listAdapter.clear();
             listAdapter.addAll(listAdapterContent);
             listView.invalidateViews();
-
         }
-
-
     }
 
     //Setup Menu
@@ -266,11 +267,11 @@ public class MainActivity extends AppCompatActivity {
         try {
             SQLiteOpenHelper revistaDaSemanaDatabaseHelper = new RevistaDaSemanaDatabaseHelper(this);
             SQLiteDatabase db = revistaDaSemanaDatabaseHelper.getReadableDatabase();
-            Cursor cursor = db.query("POSTDATA",new String[] {"TITLE", "LINK", "CATEGORY", "CONTENT"},null,null,null,null,null);
+            Cursor cursor = db.query("POSTDATA",new String[] {"TITLE", "LINK", "CATEGORY", "CONTENT", "READ"},null,null,null,null,null);
 
             //Move to the first record in the cursor
             while (cursor.moveToNext()) {
-                PostData postData = new PostData(cursor.getString(0),cursor.getString(1),cursor.getString(2),cursor.getString(3));
+                PostData postData = new PostData(cursor.getString(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4));
                 entries.add(postData);
             }
             cursor.close();
@@ -278,6 +279,7 @@ public class MainActivity extends AppCompatActivity {
 
         } catch (SQLiteException e) {
             Toast.makeText(MainActivity.this, "Erro ao acessar Banco de dados", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
         }
 
         return entries;
@@ -310,6 +312,7 @@ public class MainActivity extends AppCompatActivity {
             postDataValues.put("LINK",pd.getLink());
             postDataValues.put("CATEGORY", pd.getCategory());
             postDataValues.put("CONTENT",pd.getContent());
+            postDataValues.put("READ",pd.getRead());
             db.insert("POSTDATA", null, postDataValues);
         }
         db.close();
