@@ -43,17 +43,13 @@ public class PostDataAdapter extends BaseAdapter {
     }
 
     public void clear() {
-        Log.d("clear() before", data.toString());
 
         data.clear();
 
-        Log.d("clear() after", data.toString());
     }
 
     public void addAll(ArrayList<PostData> arrayList) {
-        Log.d("addAll() before", data.toString());
         data = arrayList;
-        Log.d("addAll() after", data.toString());
     }
 
     static class ViewHolder {

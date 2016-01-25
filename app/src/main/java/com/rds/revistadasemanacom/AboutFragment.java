@@ -48,7 +48,6 @@ public class AboutFragment extends Fragment {
             developer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d("OnAttach", "developer Clicked");
                     Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + "bruno@miz.com.br"));
                     emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Contato do Aplicativo RevistaDaSemana");
                     emailIntent.putExtra(Intent.EXTRA_TEXT, "Mensagem enviada do aplicativo Revista da Semana:");

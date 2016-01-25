@@ -62,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
         public void onServiceConnected(ComponentName name, IBinder service) {
             GetPostService.GetPostBinder getPostBinder = (GetPostService.GetPostBinder) service;
             postService = getPostBinder.getPost();
-            Log.d("onServiceConnected", postService.toString());
             bound = true;
         }
 
@@ -112,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
         receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.d("BroadCastReceiver", "OnReceive executed");
                 String message = intent.getStringExtra(GetPostService.GETPOST_MESSAGE);
                 switch (message) {
                     case GetPostService.SERVICE_INITIATED:
@@ -183,15 +181,12 @@ public class MainActivity extends AppCompatActivity {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                Log.d("handler.post", "postService: " + postService.toString());
                 if (postService != null) {
                     oldListAdapterContent = listAdapterContent;
                     listAdapterContent = new ArrayList<PostData>(postService.getPostDatasToView());
                     updatePostDataDb(oldListAdapterContent, listAdapterContent);
-                    Log.d("Result - Service", listAdapterContent.toString());
                     updateListView();
                 } else {
-                    Log.d("MainActivity", "postService == null");
                 }
             }
         });
@@ -294,11 +289,9 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<PostData> newestList;
 
         //Remove old PostData from new ArrayList
-        Log.d("MergeList", "newList: " + newList.toString());
-        Log.d("MergeList", "oldList: " + oldList.toString());
+
 
         newList.removeAll(oldList);
-        Log.d("MergeList", "newList after removeAll(oldList: " + newList.toString());
         //Move old PostData to the and of the list opening space for the new PostData
         newestList = newList;
         if (newestList.size() < 10) {

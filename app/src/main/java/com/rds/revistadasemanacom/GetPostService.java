@@ -84,15 +84,12 @@ public class GetPostService extends Service {
         @Override
         protected List<PostData> doInBackground(String... urls) {
             try {
-                Log.d("doInBackgroud URL", urls[0]);
                 List<PostData> result = loadXmlFromNetwork(urls[0]);
                 return result;
             } catch (IOException e) {
-                Log.d("doInBackgroud", "erro executando loadXmlFromNetwork - IO");
                 exceptionToBeThrown = e;
                 return null;
             } catch (XmlPullParserException e) {
-                Log.d("doInBackgroud", "erro executando loadXmlFromNetwork - XML");
                 exceptionToBeThrown = e;
                 return null;
             }
@@ -104,10 +101,8 @@ public class GetPostService extends Service {
             //Broadcast that the results are ready
             if (exceptionToBeThrown == null) {
                 sendResult(SERVICE_FINICHED);
-                Log.d("Result", postDatasToView.toString());
             } else {
                 sendResult(SERVICE_ERROR);
-                Log.d("ERROR", "Exception throwned");
             }
 
         }
@@ -123,7 +118,6 @@ public class GetPostService extends Service {
         String url = null;
 
         try {
-            Log.d("downloadUrl", urlString);
             stream = downloadUrl(urlString);
             entries = revistaDaSemanaXmlParser.parse(stream);
             //Makes sure that the InputStream is closed after the app is finished using it.
@@ -145,7 +139,6 @@ public class GetPostService extends Service {
         conn.setDoInput(true);
         //Starts the query
         conn.connect();
-        Log.d("downloadUrlCodeResponse", Integer.toString(conn.getResponseCode()));
         return conn.getInputStream();
     }
 

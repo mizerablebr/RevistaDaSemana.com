@@ -48,15 +48,12 @@ public class RevistaDaSemanaXmlParser {
                 continue;
             }
             String name = parser.getName();
-            Log.d("RevistaParser","parser.getName: " + name);
             //Start by looking for the item tag
             if (name.equals("item")) {
-                Log.d("RevistaParser", "found tag ITEM");
                 entries.add(readPostData(parser));
             } else if (name.equals("channel")) {
                 parser.next();
             } else {
-                Log.d("RevistaParser","NOT found tag ITEM");
                 skip(parser);
             }
         }
@@ -84,11 +81,9 @@ public class RevistaDaSemanaXmlParser {
                 link = readLink(parser);
             } else if (name.equals("category")) {
                 category = readCategory(parser);
-                Log.d("readPostData","category: " + category);
             } else if (name.equals("content:encoded")) {
                 content = readContent(parser);
                 content = Jsoup.parse(content).toString();
-                Log.d("readPostData","content: " + content);
             } else {
                 skip(parser);
             }

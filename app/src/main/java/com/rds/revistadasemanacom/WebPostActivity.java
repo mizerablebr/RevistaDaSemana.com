@@ -73,7 +73,6 @@ public class WebPostActivity extends AppCompatActivity {
                 db.close();
 
             } catch (SQLiteException e) {
-                Log.d("SetPostDataReaded", "Error updating database entrie");
             }
 
 
