@@ -42,7 +42,7 @@ import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static boolean ISDEBUG = false;
+    public static boolean ISDEBUG = true;
 
     private PostDataAdapter listAdapter;
     private ArrayList<PostData> listAdapterContent = new ArrayList<PostData>();

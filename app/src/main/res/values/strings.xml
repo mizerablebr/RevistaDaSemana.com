@@ -29,4 +29,5 @@
     <string name="about_author">Sobre o Autor</string>
     <string name="about_author_text">Luiz Gonzaga Lima de Morais: formado em Jornalismo pelo Universidade Católica de Pernambuco em 1978, registro DRT/PE nº 1.224/84. Faz radiojornalismo desde março de 1980, com um programa semanal nas Rádios Espinharas AM e FM na cidade de Patos (PB). Mantém na TV Sol, canal fechado de televisão na cidade de Patos, que faz parte do conteúdo da televisão por assinatura da Sol TV, o programa SALA DE CONVERSA, um programa de entrevistas e debates.</string>
     <string name="developer">Aplicativo por Bruno Morais: bruno@miz.com.br</string>
+    <string name="share">Compartilhar</string>
 </resources>

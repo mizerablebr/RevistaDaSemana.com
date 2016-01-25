@@ -1,14 +1,19 @@
 package com.rds.revistadasemanacom;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.webkit.WebView;
 import android.widget.TextView;
 
@@ -24,11 +29,13 @@ public class WebPostActivity extends AppCompatActivity {
     public static final String EXTRA_POSTDATACATEGORY = "postDataCategory";
     public static final String EXTRA_POSTDATAREAD = "postDataRead";
 
-    String titleStr;
-    String linkStr;
-    String contentStr;
-    String categoryStr;
-    String readStr;
+    private ShareActionProvider shareActionProvider;
+
+    private String titleStr;
+    private String linkStr;
+    private String contentStr;
+    private String categoryStr;
+    private String readStr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,4 +95,19 @@ public class WebPostActivity extends AppCompatActivity {
         }
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_webpost, menu);
+        MenuItem menuItem = menu.findItem(R.id.action_share);
+        shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_SUBJECT, titleStr);
+        intent.putExtra(Intent.EXTRA_TEXT, linkStr);
+        shareActionProvider.setShareIntent(intent);
+
+        return super.onCreateOptionsMenu(menu);
+    }
 }
