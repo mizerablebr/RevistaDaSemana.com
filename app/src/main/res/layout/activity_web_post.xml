@@ -18,6 +18,15 @@
         android:layout_alignParentLeft="true"/>
 
     <TextView
+        android:id="@+id/open_in_website_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:textColor="@color/wallet_holo_blue_light"
+        android:text="@string/openOnRevistaSite"/>
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"

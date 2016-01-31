@@ -237,6 +237,12 @@ public class MainActivity extends AppCompatActivity {
                 emailIntent.putExtra(Intent.EXTRA_TEXT, "Mensagem enviada do aplicativo Revista da Semana:");
                 startActivity(Intent.createChooser(emailIntent, "Contato Revista da Semana"));
                 break;
+            case R.id.openRevistaSite:
+                String url = getString(R.string.url_revista_da_Semana);
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+                break;
             case R.id.about:
                 Intent intentAbout = new Intent(this, OptionActivity.class);
                 intentAbout.putExtra("menu", OptionActivity.MENU_ABOUT);
