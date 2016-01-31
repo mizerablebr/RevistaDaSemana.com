@@ -286,18 +286,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updatePostDataDb(ArrayList<PostData> oldList, ArrayList<PostData> newList) {
+        //Number of posts on XML file
+        int nPosts = 30;
 
         ////Merge DB with just new PostDatas comparing titles
         ArrayList<PostData> newestList;
 
         //Remove old PostData from new ArrayList
-
-
         newList.removeAll(oldList);
-        //Move old PostData to the and of the list opening space for the new PostData
+        //Move old PostData to the and of the list
         newestList = newList;
-        if (newestList.size() < 10) {
-            newestList.addAll(oldList.subList(0,(10-newestList.size())));
+        if (newestList.size() < nPosts) {
+            newestList.addAll(oldList.subList(0,(nPosts-newestList.size())));
         }
 
 
