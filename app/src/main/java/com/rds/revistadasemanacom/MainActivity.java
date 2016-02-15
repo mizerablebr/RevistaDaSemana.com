@@ -7,9 +7,12 @@ import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -39,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     private String[] categories;
     private ListView drawerList;
     private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle drawerToggle;
+    private int currentPosition = 0;
 
     //Service variable
     private GetPostService postService;
@@ -55,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            Log.d("DrawerItemClick", "Categoria nº: " + position);
+            selectItem(position);
         }
     }
 
@@ -69,11 +74,11 @@ public class MainActivity extends AppCompatActivity {
         drawerList = (ListView) findViewById(R.id.drawer);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
            //Populate de ListView
-        drawerList.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_activated_1, categories));
+        drawerList.setAdapter(new CategoryMenuAdapter(this, new ArrayList<CategoryMenu>(Arrays.asList(CategoryMenu.categoryMenu))));
         drawerList.setOnItemClickListener(new DrawerItemClickListener());
 
-        //getActionBar().setDisplayHomeAsUpEnabled(true);
-        //getActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(false);
 
         // -- END Setup Navigation Drawer
 
@@ -87,8 +92,59 @@ public class MainActivity extends AppCompatActivity {
 
         // -- END Setup MainFragment
 
+        //Create the ActionBarDrawerToggle
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open_drawer, R.string.close_drawer) {
+            //Called when a drawer has settle in a completely closed state
 
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                invalidateOptionsMenu();
+            }
 
+            //Called when a drawer has settle in a completely open state
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                invalidateOptionsMenu();
+            }
+        };
+        drawerLayout.setDrawerListener(drawerToggle);
+
+        //Display the correct category selected
+        if (savedInstanceState != null) {
+            currentPosition = savedInstanceState.getInt("position");
+        } else {
+            drawerList.setItemChecked(0, true);
+            selectItem(0);
+        }
+
+    }
+
+    @Override
+    public void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        drawerToggle.syncState();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("position", currentPosition);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        drawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    //Navigation Drawer Selected Item
+    private void selectItem(int position) {
+        Log.d("DrawerItemClick", "Categoria nº: " + position);
+        currentPosition = position;
+        drawerLayout.closeDrawer(drawerList);
     }
 
     @Override
@@ -115,6 +171,11 @@ public class MainActivity extends AppCompatActivity {
     //Handle click on actionBar and Menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        //Let the ActionBarDrawerToggle handle bein clicked
+        if (drawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
         switch (item.getItemId()) {
             case R.id.updatePosts:
                 ((PostDataFragment)fragment).updatePosts();

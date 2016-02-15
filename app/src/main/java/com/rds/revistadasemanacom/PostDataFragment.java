@@ -182,9 +182,14 @@ public class PostDataFragment extends Fragment {
             }
         };
 
-
-
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        listAdapterContent = getPostDataFromDb();
+        updateListView();
+        super.onResume();
     }
 
     private void updateAdapterContentFromService () {
