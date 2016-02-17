@@ -17,16 +17,11 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
-
-import java.security.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -152,7 +147,6 @@ public class MainActivity extends AppCompatActivity {
         Date date = new Date();
         editor.putLong("categoriesTime", date.getTime());
         editor.apply();
-        Log.d("OnPouseposition", "CurrentPostion: " + currentPosition + "categoriesTime: " + String.valueOf(date.getTime()));
     }
 
     @Override
@@ -168,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
 
     //Navigation Drawer Selected Item
     private void selectItem(int position) {
-        Log.d("DrawerItemClick", "Categoria nº: " + position);
+        setActionBarTitle(position);
         currentPosition = position;
         drawerLayout.closeDrawer(drawerList);
         ((PostDataFragment) fragment).setCurrentCategorie(currentPosition);
@@ -192,6 +186,7 @@ public class MainActivity extends AppCompatActivity {
             currentPosition = settings.getInt("categories", 0);
         }
         drawerList.setItemChecked(currentPosition, true);
+        setActionBarTitle(currentPosition);
     }
 
 
@@ -263,7 +258,6 @@ public class MainActivity extends AppCompatActivity {
                 counter = DatabaseUtils.queryNumEntries(db, "POSTDATA", "CATEGORY = ? AND READ != ?", new String[] {menu.getCatName(), "yes"});
             }
             menu.setQuantity((int) (long) counter);
-            Log.d("countPostData", "Category: " + menu.getCatName() + " - nº: " + menu.getQuantity());
             updatedMenu.add(menu);
         }
 
@@ -271,7 +265,7 @@ public class MainActivity extends AppCompatActivity {
         return updatedMenu;
     }
 
-    private void updateDrawerMenuList() {
+    protected void updateDrawerMenuList() {
         synchronized (this) {
             categoryMenus = countPostDataInCategory(new ArrayList<CategoryMenu>(Arrays.asList(CategoryMenu.categoryMenu)));
             menuAdapter.clear();
@@ -295,6 +289,16 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
 
+    }
+
+    private void setActionBarTitle(int position) {
+        String title;
+        if (position == 0) {
+            title = getResources().getString(R.string.app_name);
+        } else {
+            title = CategoryMenu.categoryMenu[position].getCatName();
+        }
+        getSupportActionBar().setTitle(title);
     }
 
 

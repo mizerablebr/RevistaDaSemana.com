@@ -306,6 +306,8 @@ public class PostDataFragment extends Fragment {
         }
         db.close();
 
+        //
+        ((MainActivity) getActivity()).updateDrawerMenuList();
     }
 
     private boolean checkInternetConnection() {
