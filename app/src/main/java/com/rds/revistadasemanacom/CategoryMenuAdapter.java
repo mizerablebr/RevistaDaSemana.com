@@ -25,7 +25,6 @@ public class CategoryMenuAdapter extends BaseAdapter {
         activity = a;
         menus = m;
         for (CategoryMenu cm : menus) {
-            Log.d("CategoryAdapter", "Menu: " + cm.getCatName() + " , Qaunt: " + cm.getQuantity());
         }
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
