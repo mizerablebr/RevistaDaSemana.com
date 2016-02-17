@@ -51,9 +51,7 @@ public class PostDataFragment extends Fragment {
     private ProgressDialog mProgressDialog;
 
     //Navigation Drawer Variables
-    private String[] categories;
-    private ListView drawerList;
-    private DrawerLayout drawerLayout;
+    private int currentCategorie;
 
     //Service variable
     private GetPostService postService;
@@ -82,7 +80,9 @@ public class PostDataFragment extends Fragment {
         }
     };
 
-
+    public void setCurrentCategorie(int cat) {
+        currentCategorie = cat;
+    }
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
@@ -119,6 +119,7 @@ public class PostDataFragment extends Fragment {
         listView.setOnItemClickListener(itemClickListener);
 
         //Add an ListView Adapter
+        ArrayList<PostData> listAdapterContentRAW = getPostDataFromDb();
         listAdapterContent = getPostDataFromDb();
         listAdapter = new PostDataAdapter(this.getActivity(),listAdapterContent);
         listView.setAdapter(listAdapter);
@@ -238,7 +239,12 @@ public class PostDataFragment extends Fragment {
         try {
             SQLiteOpenHelper revistaDaSemanaDatabaseHelper = new RevistaDaSemanaDatabaseHelper(getActivity());
             SQLiteDatabase db = revistaDaSemanaDatabaseHelper.getReadableDatabase();
-            Cursor cursor = db.query("POSTDATA",new String[] {"TITLE", "LINK", "CATEGORY", "CONTENT", "READ"},null,null,null,null,null);
+            Cursor cursor;
+            if (currentCategorie == 0) {
+                cursor = db.query("POSTDATA",new String[] {"TITLE", "LINK", "CATEGORY", "CONTENT", "READ"}, null,null,null,null,null);
+            } else {
+                cursor = db.query("POSTDATA",new String[] {"TITLE", "LINK", "CATEGORY", "CONTENT", "READ"}, "CATEGORY = ?",new String[] {CategoryMenu.categoryMenu[currentCategorie].getCatName()},null,null,null);
+            }
 
             //Move to the first record in the cursor
             while (cursor.moveToNext()) {

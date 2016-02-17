@@ -7,10 +7,13 @@ import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.database.DatabaseUtils;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -43,7 +46,9 @@ public class MainActivity extends AppCompatActivity {
     private ListView drawerList;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
-    private int currentPosition = 0;
+    public static final String PREFS_NAME = "MyPrefsFile";
+        //Variable that control the displayed categories
+    protected int currentPosition = 0;
 
     //Service variable
     private GetPostService postService;
@@ -74,16 +79,22 @@ public class MainActivity extends AppCompatActivity {
         drawerList = (ListView) findViewById(R.id.drawer);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
            //Populate de ListView
-        drawerList.setAdapter(new CategoryMenuAdapter(this, new ArrayList<CategoryMenu>(Arrays.asList(CategoryMenu.categoryMenu))));
+        ArrayList<CategoryMenu> categoryMenus = countPostDataInCategory(new ArrayList<CategoryMenu>(Arrays.asList(CategoryMenu.categoryMenu)));
+        categoryMenus = countPostDataInCategory(categoryMenus);
+        drawerList.setAdapter(new CategoryMenuAdapter(this, categoryMenus));
         drawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(false);
 
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        currentPosition = settings.getInt("categories", 0);
+
         // -- END Setup Navigation Drawer
 
         // Setup MainFragment
-        fragment = new PostDataFragment();
+        fragment =  new PostDataFragment();
+        ((PostDataFragment) fragment).setCurrentCategorie(currentPosition);
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.replace(R.id.content_frame, fragment);
         ft.addToBackStack(null);
@@ -111,14 +122,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         drawerLayout.setDrawerListener(drawerToggle);
-
         //Display the correct category selected
-        if (savedInstanceState != null) {
-            currentPosition = savedInstanceState.getInt("position");
-        } else {
-            drawerList.setItemChecked(0, true);
-            selectItem(0);
-        }
 
     }
 
@@ -135,6 +139,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putInt("categories", currentPosition);
+        editor.apply();
+        Log.d("OnPouseposition", "CurrentPostion: " + currentPosition);
+    }
+
+    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         drawerToggle.onConfigurationChanged(newConfig);
@@ -145,12 +159,21 @@ public class MainActivity extends AppCompatActivity {
         Log.d("DrawerItemClick", "Categoria nº: " + position);
         currentPosition = position;
         drawerLayout.closeDrawer(drawerList);
+        ((PostDataFragment) fragment).setCurrentCategorie(currentPosition);
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.addToBackStack(null);
+        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+        ft.detach(fragment);
+        ft.attach(fragment);
+        ft.commit();
     }
 
     @Override
     protected void onResume() {
-
         super.onResume();
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        currentPosition = settings.getInt("categories", 0);
+        drawerList.setItemChecked(currentPosition, true);
     }
 
 
@@ -205,6 +228,25 @@ public class MainActivity extends AppCompatActivity {
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    //Count PostData from each category
+    public ArrayList<CategoryMenu> countPostDataInCategory(ArrayList<CategoryMenu> oldMenu) {
+        ArrayList<CategoryMenu> updatedMenu = new ArrayList<>();
+
+        SQLiteOpenHelper revistaDaSemanaDatabaseHelper = new RevistaDaSemanaDatabaseHelper(this);
+        SQLiteDatabase db = revistaDaSemanaDatabaseHelper.getReadableDatabase();
+
+        for (CategoryMenu menu : oldMenu) {
+            long counter;
+            counter = DatabaseUtils.queryNumEntries(db, "POSTDATA", "CATEGORY = ? AND READ != ?", new String[] {menu.getCatName(), "yes"});
+            menu.setQuantity((int) (long) counter);
+            Log.d("countPostData", "Category: " + menu.getCatName() + " - nº: " + menu.getQuantity());
+            updatedMenu.add(menu);
+        }
+
+        db.close();
+        return updatedMenu;
     }
 
 

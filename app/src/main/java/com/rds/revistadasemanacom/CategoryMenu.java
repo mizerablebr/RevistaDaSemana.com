@@ -12,10 +12,16 @@ public class CategoryMenu {
     public static final CategoryMenu[] categoryMenu = {
             new CategoryMenu("Todos"),
             new CategoryMenu("Blog"),
-            new CategoryMenu("Nacionais"),
-            new CategoryMenu("Regional"),
+            new CategoryMenu("Sala de Conversa"),
+            new CategoryMenu("Mensagem"),
+            new CategoryMenu("Registros"),
+            new CategoryMenu("Destaques"),
+            new CategoryMenu("Opinião"),
+            new CategoryMenu("Locais"),
+            new CategoryMenu("Regionais"),
             new CategoryMenu("Estaduais"),
-            new CategoryMenu("Locais")
+            new CategoryMenu("Nacionais"),
+            new CategoryMenu("Áudios")
     };
 
     //Constructor
