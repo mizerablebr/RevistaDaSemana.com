@@ -48,7 +48,7 @@ public class RevistaDaSemanaDatabaseHelper extends SQLiteOpenHelper {
                     + "CATEGORY TEXT, "
                     + "CONTENT TEXT, "
                     + "READ TEXT DEFAULT 'not');");
-            insertPostData(db, FIRST_POST, "www.miz.com.br", "Nacional", "blá blá blá", "not");
+            insertPostData(db, FIRST_POST, "www.miz.com.br", "Nacionais", "blá blá blá", "not");
             insertPostData(db, SECOND_POST, "http://www.google.com.br", "Blog", "blu blu blu", "not");
         }
 
