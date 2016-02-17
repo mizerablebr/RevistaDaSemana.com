@@ -2,6 +2,7 @@ package com.rds.revistadasemanacom;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,9 @@ public class CategoryMenuAdapter extends BaseAdapter {
     public CategoryMenuAdapter(Activity a, ArrayList<CategoryMenu> m) {
         activity = a;
         menus = m;
+        for (CategoryMenu cm : menus) {
+            Log.d("CategoryAdapter", "Menu: " + cm.getCatName() + " , Qaunt: " + cm.getQuantity());
+        }
         inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -77,7 +81,13 @@ public class CategoryMenuAdapter extends BaseAdapter {
 
 
         mViewHolder.label.setText(categoryMenu.getCatName());
-        mViewHolder.counter.setText(Integer.toString(categoryMenu.getQuantity()));
+        if (categoryMenu.getQuantity() > 0) {
+            vi.findViewById(R.id.listView_counter_parent).setAlpha(1.0f);
+            mViewHolder.counter.setText(Integer.toString(categoryMenu.getQuantity()));
+        } else {
+            vi.findViewById(R.id.listView_counter_parent).setAlpha(0.0f);
+        }
+
         return vi;
     }
 
