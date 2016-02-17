@@ -26,9 +26,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 
+import java.security.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
-
+import java.util.Date;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -46,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
     private ListView drawerList;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
+    private ArrayList<CategoryMenu> categoryMenus;
+    private CategoryMenuAdapter menuAdapter;
     public static final String PREFS_NAME = "MyPrefsFile";
         //Variable that control the displayed categories
     protected int currentPosition = 0;
@@ -79,16 +82,24 @@ public class MainActivity extends AppCompatActivity {
         drawerList = (ListView) findViewById(R.id.drawer);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
            //Populate de ListView
-        ArrayList<CategoryMenu> categoryMenus = countPostDataInCategory(new ArrayList<CategoryMenu>(Arrays.asList(CategoryMenu.categoryMenu)));
+        categoryMenus = countPostDataInCategory(new ArrayList<CategoryMenu>(Arrays.asList(CategoryMenu.categoryMenu)));
         categoryMenus = countPostDataInCategory(categoryMenus);
-        drawerList.setAdapter(new CategoryMenuAdapter(this, categoryMenus));
+        menuAdapter = new CategoryMenuAdapter(this, categoryMenus);
+        drawerList.setAdapter(menuAdapter);
         drawerList.setOnItemClickListener(new DrawerItemClickListener());
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(false);
 
+        //Check if the category selection is old
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        currentPosition = settings.getInt("categories", 0);
+        if (categoriesTimeStampIsOld()) {
+            currentPosition = 0;
+        } else {
+            currentPosition = settings.getInt("categories", 0);
+        }
+
+
 
         // -- END Setup Navigation Drawer
 
@@ -133,19 +144,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putInt("position", currentPosition);
-    }
-
-    @Override
     protected void onPause() {
         super.onPause();
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
         editor.putInt("categories", currentPosition);
+        Date date = new Date();
+        editor.putLong("categoriesTime", date.getTime());
         editor.apply();
-        Log.d("OnPouseposition", "CurrentPostion: " + currentPosition);
+        Log.d("OnPouseposition", "CurrentPostion: " + currentPosition + "categoriesTime: " + String.valueOf(date.getTime()));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     @Override
@@ -171,8 +183,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        updateDrawerMenuList();
+        //Check if the category selection is old
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        currentPosition = settings.getInt("categories", 0);
+        if (categoriesTimeStampIsOld()) {
+            currentPosition = 0;
+        } else {
+            currentPosition = settings.getInt("categories", 0);
+        }
         drawerList.setItemChecked(currentPosition, true);
     }
 
@@ -247,6 +265,32 @@ public class MainActivity extends AppCompatActivity {
 
         db.close();
         return updatedMenu;
+    }
+
+    private void updateDrawerMenuList() {
+        synchronized (this) {
+            categoryMenus = countPostDataInCategory(new ArrayList<CategoryMenu>(Arrays.asList(CategoryMenu.categoryMenu)));
+            menuAdapter.clear();
+            menuAdapter.addAll(countPostDataInCategory(categoryMenus));
+            drawerList.invalidateViews();
+        }
+    }
+
+    private boolean categoriesTimeStampIsOld() {
+        int minutesToBeOld = 20;
+
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        long timeToCheck = settings.getLong("categoriesTime", 0);
+
+        Date dateToCheck = new Date(timeToCheck + (minutesToBeOld * 60 * 1000));
+        Date actualDate = new Date();
+
+        if (actualDate.after(dateToCheck)) {
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
 

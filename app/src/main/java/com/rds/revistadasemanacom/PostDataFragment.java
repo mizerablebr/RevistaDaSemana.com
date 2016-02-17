@@ -188,6 +188,7 @@ public class PostDataFragment extends Fragment {
 
     @Override
     public void onResume() {
+        setCurrentCategorie(((MainActivity) getActivity()).currentPosition);
         listAdapterContent = getPostDataFromDb();
         updateListView();
         super.onResume();

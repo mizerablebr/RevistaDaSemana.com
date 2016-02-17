@@ -30,10 +30,12 @@
             android:textSize="14sp"
             android:paddingTop="0dp"
             android:paddingBottom="0dp"
-            android:paddingRight="3dp"
-            android:paddingLeft="3dp"
+            android:paddingRight="4dp"
+            android:paddingLeft="4dp"
             android:gravity="center"
             android:text="0"
+            android:textStyle="bold"
+            android:textColor="#ffffff"
             />
     </LinearLayout>
 
