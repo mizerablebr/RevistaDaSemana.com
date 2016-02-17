@@ -257,7 +257,11 @@ public class MainActivity extends AppCompatActivity {
 
         for (CategoryMenu menu : oldMenu) {
             long counter;
-            counter = DatabaseUtils.queryNumEntries(db, "POSTDATA", "CATEGORY = ? AND READ != ?", new String[] {menu.getCatName(), "yes"});
+            if (menu.getCatName().equals(CategoryMenu.categoryMenu[0].getCatName())) {
+                counter = DatabaseUtils.queryNumEntries(db, "POSTDATA", "READ != ?", new String[] {"yes"});
+            } else {
+                counter = DatabaseUtils.queryNumEntries(db, "POSTDATA", "CATEGORY = ? AND READ != ?", new String[] {menu.getCatName(), "yes"});
+            }
             menu.setQuantity((int) (long) counter);
             Log.d("countPostData", "Category: " + menu.getCatName() + " - nº: " + menu.getQuantity());
             updatedMenu.add(menu);

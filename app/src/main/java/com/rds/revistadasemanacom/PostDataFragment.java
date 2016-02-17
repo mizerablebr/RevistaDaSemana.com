@@ -34,6 +34,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.security.PrivateKey;
 import java.util.ArrayList;
 
 
@@ -201,9 +202,8 @@ public class PostDataFragment extends Fragment {
             @Override
             public void run() {
                 if (postService != null) {
-                    oldListAdapterContent = listAdapterContent;
                     listAdapterContent = new ArrayList<PostData>(postService.getPostDatasToView());
-                    updatePostDataDb(oldListAdapterContent, listAdapterContent);
+                    updatePostDataDb(listAdapterContent);
                     updateListView();
                 } else {
                 }
@@ -214,8 +214,9 @@ public class PostDataFragment extends Fragment {
 
     public void updateListView () {
         synchronized (this) {
+            setCurrentCategorie(((MainActivity) getActivity()).currentPosition);
             listAdapter.clear();
-            listAdapter.addAll(listAdapterContent);
+            listAdapter.addAll(getPostDataFromDb());
             listView.invalidateViews();
         }
     }
@@ -263,9 +264,22 @@ public class PostDataFragment extends Fragment {
         return entries;
     }
 
-    private void updatePostDataDb(ArrayList<PostData> oldList, ArrayList<PostData> newList) {
+    private void updatePostDataDb(ArrayList<PostData> newList) {
+        ArrayList<PostData> oldList = new ArrayList<PostData>();
+
         //Number of posts on XML file
         int nPosts = 30;
+
+        //Get actual PostDatas on DB
+        SQLiteOpenHelper revistaDaSemanaDatabaseHelper = new RevistaDaSemanaDatabaseHelper(getActivity());
+        SQLiteDatabase db = revistaDaSemanaDatabaseHelper.getWritableDatabase();
+        Cursor cursor;
+        cursor = db.query("POSTDATA",new String[] {"TITLE", "LINK", "CATEGORY", "CONTENT", "READ"}, null,null,null,null,null);
+        while (cursor.moveToNext()) {
+            PostData postData = new PostData(cursor.getString(0),cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4));
+            oldList.add(postData);
+        }
+        cursor.close();
 
         ////Merge DB with just new PostDatas comparing titles
         ArrayList<PostData> newestList;
@@ -278,10 +292,7 @@ public class PostDataFragment extends Fragment {
             newestList.addAll(oldList.subList(0,(nPosts-newestList.size())));
         }
 
-
-        SQLiteOpenHelper revistaDaSemanaDatabaseHelper = new RevistaDaSemanaDatabaseHelper(getActivity());
-        SQLiteDatabase db = revistaDaSemanaDatabaseHelper.getWritableDatabase();
-        //Create the database
+        //Clear the database
         db.delete("POSTDATA", null, null);
         //Insert new PostData
         for (PostData pd : newestList) {
